@@ -16,6 +16,13 @@
     "tslib": "^2.0.0"
   },
   "devDependencies": {
+    "@aws-cdk/assert": "^1.46.0",
+    "@aws-cdk/aws-apigatewayv2": "^1.139.0",
+    "@aws-cdk/aws-cognito": "^1.139.0",
+    "@aws-cdk/aws-dynamodb": "^1.139.0",
+    "@aws-cdk/aws-lambda": "^1.139.0",
+    "@aws-cdk/core": "^1.46.0",
+    "@myin/aws-cdk": "^0.0.9",
     "@nrwl/cli": "12.10.1",
     "@nrwl/cypress": "12.10.1",
     "@nrwl/eslint-plugin-nx": "12.10.1",

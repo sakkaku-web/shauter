@@ -1,6 +1,45 @@
 {
   "version": 2,
   "projects": {
+    "aws-cloud": {
+      "projectType": "application",
+      "root": "apps/aws-cloud",
+      "sourceRoot": "apps/aws-cloud/src",
+      "targets": {
+        "deploy": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "cwd": "apps/aws-cloud",
+            "commands": [
+              {
+                "command": "if [ \"{args.stack}\" = \"undefined\" ]; then cdk deploy --require-approval=never; else cdk deploy --require-approval=never {args.stack}; fi"
+              }
+            ]
+          }
+        },
+        "destroy": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "cwd": "apps/aws-cloud",
+            "commands": [
+              {
+                "command": "if [ \"{args.stack}\" = \"undefined\" ]; then cdk destroy -f; else cdk destroy -f {args.stack}; fi"
+              }
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/apps/aws-cloud"
+          ],
+          "options": {
+            "jestConfig": "apps/aws-cloud/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "shauter-web": {
       "root": "apps/shauter-web",
       "sourceRoot": "apps/shauter-web/src",
@@ -8,7 +47,9 @@
       "targets": {
         "build": {
           "executor": "@nrwl/web:build",
-          "outputs": ["{options.outputPath}"],
+          "outputs": [
+            "{options.outputPath}"
+          ],
           "options": {
             "outputPath": "dist/apps/shauter-web",
             "index": "apps/shauter-web/src/index.html",
@@ -20,7 +61,9 @@
               "apps/shauter-web/src/favicon.ico",
               "apps/shauter-web/src/assets"
             ],
-            "styles": ["apps/shauter-web/src/styles.scss"],
+            "styles": [
+              "apps/shauter-web/src/styles.scss"
+            ],
             "scripts": [],
             "webpackConfig": "@nrwl/react/plugins/webpack"
           },
@@ -64,14 +107,20 @@
         },
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "outputs": ["{options.outputFile}"],
+          "outputs": [
+            "{options.outputFile}"
+          ],
           "options": {
-            "lintFilePatterns": ["apps/shauter-web/**/*.{ts,tsx,js,jsx}"]
+            "lintFilePatterns": [
+              "apps/shauter-web/**/*.{ts,tsx,js,jsx}"
+            ]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/apps/shauter-web"],
+          "outputs": [
+            "coverage/apps/shauter-web"
+          ],
           "options": {
             "jestConfig": "apps/shauter-web/jest.config.js",
             "passWithNoTests": true
@@ -99,9 +148,13 @@
         },
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "outputs": ["{options.outputFile}"],
+          "outputs": [
+            "{options.outputFile}"
+          ],
           "options": {
-            "lintFilePatterns": ["apps/shauter-web-e2e/**/*.{js,ts}"]
+            "lintFilePatterns": [
+              "apps/shauter-web-e2e/**/*.{js,ts}"
+            ]
           }
         }
       }

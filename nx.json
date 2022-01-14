@@ -27,6 +27,9 @@
     ]
   },
   "projects": {
+    "aws-cloud": {
+      "tags": []
+    },
     "shauter-web": {
       "tags": []
     },
