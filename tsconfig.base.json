@@ -14,7 +14,11 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@shauter/aws-shared": ["libs/aws-shared/src/index.ts"],
+      "@shauter/core": ["libs/core/src/index.ts"],
+      "@shauter/shaut-message": ["libs/shaut-message/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

@@ -30,12 +30,84 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/apps/aws-cloud"
-          ],
+          "outputs": ["coverage/apps/aws-cloud"],
           "options": {
             "jestConfig": "apps/aws-cloud/jest.config.js",
             "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "aws-shared": {
+      "root": "libs/aws-shared",
+      "sourceRoot": "libs/aws-shared/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/aws-shared/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/aws-shared"],
+          "options": {
+            "jestConfig": "libs/aws-shared/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "core": {
+      "root": "libs/core",
+      "sourceRoot": "libs/core/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/core/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/core"],
+          "options": {
+            "jestConfig": "libs/core/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "shaut-message": {
+      "root": "libs/shaut-message",
+      "sourceRoot": "libs/shaut-message/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/shaut-message/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shaut-message"],
+          "options": {
+            "jestConfig": "libs/shaut-message/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "package": {
+          "executor": "@myin/aws-cdk:package",
+          "options": {
+            "entryFile": "libs/shaut-message/src/index.ts",
+            "tsConfig": "libs/shaut-message/tsconfig.lib.json",
+            "outputPath": "dist/libs/shaut-message"
           }
         }
       }
@@ -47,9 +119,7 @@
       "targets": {
         "build": {
           "executor": "@nrwl/web:build",
-          "outputs": [
-            "{options.outputPath}"
-          ],
+          "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/apps/shauter-web",
             "index": "apps/shauter-web/src/index.html",
@@ -61,9 +131,7 @@
               "apps/shauter-web/src/favicon.ico",
               "apps/shauter-web/src/assets"
             ],
-            "styles": [
-              "apps/shauter-web/src/styles.scss"
-            ],
+            "styles": ["apps/shauter-web/src/styles.scss"],
             "scripts": [],
             "webpackConfig": "@nrwl/react/plugins/webpack"
           },
@@ -107,20 +175,14 @@
         },
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "outputs": [
-            "{options.outputFile}"
-          ],
+          "outputs": ["{options.outputFile}"],
           "options": {
-            "lintFilePatterns": [
-              "apps/shauter-web/**/*.{ts,tsx,js,jsx}"
-            ]
+            "lintFilePatterns": ["apps/shauter-web/**/*.{ts,tsx,js,jsx}"]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/apps/shauter-web"
-          ],
+          "outputs": ["coverage/apps/shauter-web"],
           "options": {
             "jestConfig": "apps/shauter-web/jest.config.js",
             "passWithNoTests": true
@@ -148,13 +210,9 @@
         },
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "outputs": [
-            "{options.outputFile}"
-          ],
+          "outputs": ["{options.outputFile}"],
           "options": {
-            "lintFilePatterns": [
-              "apps/shauter-web-e2e/**/*.{js,ts}"
-            ]
+            "lintFilePatterns": ["apps/shauter-web-e2e/**/*.{js,ts}"]
           }
         }
       }

@@ -1,0 +1,6 @@
+{
+  "name": "shaut-message",
+  "version": "1.0.0",
+  "main": "src/app.js",
+  "dependencies": {}
+}

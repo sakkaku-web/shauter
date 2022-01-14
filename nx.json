@@ -30,6 +30,15 @@
     "aws-cloud": {
       "tags": []
     },
+    "aws-shared": {
+      "tags": []
+    },
+    "core": {
+      "tags": []
+    },
+    "shaut-message": {
+      "tags": []
+    },
     "shauter-web": {
       "tags": []
     },
