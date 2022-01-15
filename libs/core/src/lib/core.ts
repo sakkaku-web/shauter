@@ -1,6 +1,9 @@
+import { RegionService } from '..';
+
 export interface ShautMessage {
   text: string;
   origin: Coordinate;
+  radius: number;
 }
 
 export interface ShautUser {
@@ -19,4 +22,21 @@ export interface ShautMessageService {
 
 export interface ShautUserService {
   getUsersForRegions(regions: Coordinate[]): Promise<ShautUser[]>;
+}
+
+export class ShautService {
+  constructor(
+    private messageService: ShautMessageService,
+    private userService: ShautUserService,
+    private regionService: RegionService = new RegionService()
+  ) {}
+
+  async shautMessage(message: ShautMessage): Promise<void> {
+    const regions = this.regionService.getRegionsForShaut(
+      message.origin,
+      message.radius
+    );
+    const users = await this.userService.getUsersForRegions(regions);
+    await this.messageService.sendMessageToUsers(message, users);
+  }
 }

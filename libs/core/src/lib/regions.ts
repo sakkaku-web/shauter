@@ -15,7 +15,14 @@ interface RegionBox {
 }
 
 export class RegionService {
-  constructor(private options: RegionServiceOptions) {}
+  constructor(
+    private options: RegionServiceOptions = {
+      lat: 90,
+      long: 180,
+      latDividor: 900,
+      longDividor: 1800,
+    }
+  ) {}
 
   private get dividor(): Coordinate {
     return {

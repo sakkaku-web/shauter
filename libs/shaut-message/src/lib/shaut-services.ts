@@ -19,6 +19,15 @@ const client = new DynamoDBClient({
 
 export class DynamodbShautMessageService implements ShautMessageService {
   async sendMessageToUsers(message: ShautMessage, users: ShautUser[]) {
+    const response = await client.send(
+      new QueryCommand({
+        TableName: ShautMessageTable,
+        KeyConditionExpression: `${ShautMessageColumn.REGION} IN (:regions)`,
+        ExpressionAttributeValues: {
+          ':regions': { SS: ['1'] },
+        },
+      })
+    );
     console.log(message, users);
   }
 }
