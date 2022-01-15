@@ -2,5 +2,7 @@
   "name": "shaut-message",
   "version": "1.0.0",
   "main": "src/app.js",
-  "dependencies": {}
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.46.0"
+  }
 }

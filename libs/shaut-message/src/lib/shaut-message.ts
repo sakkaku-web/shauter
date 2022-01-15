@@ -13,7 +13,7 @@ export const handler = async ({ body }: APIGatewayEvent) => {
   const message: ShautMessage = JSON.parse(body);
 
   try {
-    shautService.shautMessage(message);
+    await shautService.shautMessage(message);
   } catch (err) {
     console.log(err);
     return err;

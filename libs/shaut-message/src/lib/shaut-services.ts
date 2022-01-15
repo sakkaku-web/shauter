@@ -69,7 +69,7 @@ export class DynamodbShautUserService implements ShautUserService {
     const regionIds = regions.map((coor) => coordinatesToRegion(coor));
     const query = new QueryCommand({
       TableName: ShautUserTable,
-      KeyConditionExpression: `${ShautUserColumn.REGION} IN :regions`,
+      KeyConditionExpression: `${ShautUserColumn.REGION} IN (:regions)`,
       ExpressionAttributeValues: {
         ':regions': { SS: regionIds },
       },

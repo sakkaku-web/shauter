@@ -58,7 +58,7 @@ export class AppStack extends cdk.Stack {
       functionName: 'shautMessageFunction',
       runtime: Runtime.NODEJS_14_X,
       code: Code.fromAsset(join(libsPath, 'shaut-message')),
-      handler: 'shaut-message.getHandler',
+      handler: 'shaut-message.handler',
       logRetention: RetentionDays.ONE_MONTH,
     });
 
