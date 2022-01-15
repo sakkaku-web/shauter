@@ -10,7 +10,7 @@ import {
   ShautMessageColumn,
   ShautUserTable,
   ShautUserColumn,
-} from '@shauter/aws-shared';
+} from '../../../../libs/aws-shared/src';
 
 export class AppStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
@@ -28,7 +28,7 @@ export class AppStack extends cdk.Stack {
       },
     });
 
-    const messageTable = new Table(scope, 'shautMessage', {
+    const messageTable = new Table(this, 'shautMessage', {
       tableName: ShautMessageTable,
       timeToLiveAttribute: ShautMessageColumn.EXPIRES,
       partitionKey: {
@@ -41,7 +41,7 @@ export class AppStack extends cdk.Stack {
       },
     });
 
-    const userTable = new Table(scope, 'shautUser', {
+    const userTable = new Table(this, 'shautUser', {
       tableName: ShautUserTable,
       partitionKey: {
         name: ShautUserColumn.REGION,
@@ -54,7 +54,7 @@ export class AppStack extends cdk.Stack {
     });
 
     const libsPath = '../../dist/libs';
-    const shautMessageFunction = new Function(scope, 'shautMessageFunction', {
+    const shautMessageFunction = new Function(this, 'shautMessageFunction', {
       functionName: 'shautMessageFunction',
       runtime: Runtime.NODEJS_14_X,
       code: Code.fromAsset(join(libsPath, 'shaut-message')),

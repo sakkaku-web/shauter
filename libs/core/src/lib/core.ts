@@ -1,4 +1,4 @@
-import { RegionService } from '..';
+import { RegionService } from './regions';
 
 export interface ShautMessage {
   text: string;

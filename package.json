@@ -5,7 +5,9 @@
   "scripts": {
     "start": "nx serve",
     "build": "nx build",
-    "test": "nx test"
+    "test": "nx test",
+    "package": "nx package shaut-message",
+    "deploy": "npm run package && nx deploy aws-cloud"
   },
   "private": true,
   "dependencies": {

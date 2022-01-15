@@ -59,6 +59,7 @@ export class DynamodbShautMessageService implements ShautMessageService {
       })
     );
 
+    // TODO: handle unprocessed
     console.log('Saved', response.UnprocessedItems);
   }
 }
