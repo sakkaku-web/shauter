@@ -5,13 +5,18 @@ import { AttributeType, Table } from '@aws-cdk/aws-dynamodb';
 import { Code, Function, Runtime } from '@aws-cdk/aws-lambda';
 import { RetentionDays } from '@aws-cdk/aws-logs';
 import { join } from 'path';
-import { ShautMessageTable, ShautMessageColumn } from '@shauter/aws-shared';
+import {
+  ShautMessageTable,
+  ShautMessageColumn,
+  ShautUserTable,
+  ShautUserColumn,
+} from '@shauter/aws-shared';
 
 export class AppStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    const api = new HttpApi(this, 'commissionApi', {
+    const api = new HttpApi(this, 'shautApi', {
       corsPreflight: {
         allowOrigins: [
           'http://localhost:4200',
@@ -23,7 +28,7 @@ export class AppStack extends cdk.Stack {
       },
     });
 
-    const table = new Table(scope, 'shautMessage', {
+    const messageTable = new Table(scope, 'shautMessage', {
       tableName: ShautMessageTable,
       timeToLiveAttribute: 'expires',
       partitionKey: {
@@ -36,14 +41,14 @@ export class AppStack extends cdk.Stack {
       },
     });
 
-    table.addGlobalSecondaryIndex({
-      indexName: 'regions',
+    const userTable = new Table(scope, 'shautUser', {
+      tableName: ShautUserTable,
       partitionKey: {
-        name: ShautMessageColumn.REGION,
+        name: ShautUserColumn.REGION,
         type: AttributeType.STRING,
       },
       sortKey: {
-        name: ShautMessageColumn.USER_ID,
+        name: ShautUserColumn.USER_ID,
         type: AttributeType.STRING,
       },
     });
@@ -57,7 +62,8 @@ export class AppStack extends cdk.Stack {
       logRetention: RetentionDays.ONE_MONTH,
     });
 
-    table.grantWriteData(shautMessageFunction);
+    messageTable.grantWriteData(shautMessageFunction);
+    userTable.grantReadData(shautMessageFunction);
 
     api.addRoutes({
       path: '/shaut',
@@ -67,5 +73,7 @@ export class AppStack extends cdk.Stack {
         shautMessageFunction
       ),
     });
+
+    new cdk.CfnOutput(this, 'apiUrl', { value: api.url });
   }
 }
