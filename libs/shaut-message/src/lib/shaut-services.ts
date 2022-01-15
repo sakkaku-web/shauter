@@ -10,6 +10,7 @@ import {
   BatchWriteItemCommand,
   WriteRequest,
   QueryCommand,
+  PutItemCommand,
 } from '@aws-sdk/client-dynamodb';
 import {
   ShautMessageColumn,
@@ -80,6 +81,15 @@ export class DynamodbShautUserService implements ShautUserService {
   }
 
   async updateUser(user: ShautUser) {
-    console.log(user);
+    const putRequest = new PutItemCommand({
+      TableName: ShautUserTable,
+      Item: {
+        [ShautUserColumn.REGION]: { S: coordinatesToRegion(user.region) },
+        [ShautUserColumn.USER_ID]: { S: user.id },
+      },
+    });
+
+    const response = await client.send(putRequest);
+    console.log(response.Attributes);
   }
 }

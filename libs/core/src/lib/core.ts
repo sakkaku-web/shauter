@@ -40,4 +40,8 @@ export class ShautService {
     const users = await this.userService.getUsersForRegions(regions);
     await this.messageService.sendMessageToUsers(message, users);
   }
+
+  async updateUser(user: ShautUser): Promise<void> {
+    await this.userService.updateUser(user);
+  }
 }
