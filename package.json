@@ -7,7 +7,7 @@
     "build": "nx build",
     "test": "nx test",
     "package": "nx package shaut-message",
-    "deploy": "npm run package && nx deploy aws-cloud"
+    "deploy": "npm run package && nx deploy shauter-cloud"
   },
   "private": true,
   "dependencies": {

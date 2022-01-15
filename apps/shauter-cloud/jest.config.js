@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: 'aws-cloud',
+  displayName: 'shauter-cloud',
   preset: '../../jest.preset.js',
   globals: {
     'ts-jest': {
@@ -10,5 +10,5 @@ module.exports = {
     '^.+\\.[tj]s$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../coverage/apps/aws-cloud',
+  coverageDirectory: '../../coverage/apps/shauter-cloud',
 };

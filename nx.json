@@ -27,9 +27,6 @@
     ]
   },
   "projects": {
-    "aws-cloud": {
-      "tags": []
-    },
     "aws-shared": {
       "tags": []
     },
@@ -37,6 +34,9 @@
       "tags": []
     },
     "shaut-message": {
+      "tags": []
+    },
+    "shauter-cloud": {
       "tags": []
     },
     "shauter-web": {

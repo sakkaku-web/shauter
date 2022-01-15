@@ -1,43 +1,6 @@
 {
   "version": 2,
   "projects": {
-    "aws-cloud": {
-      "projectType": "application",
-      "root": "apps/aws-cloud",
-      "sourceRoot": "apps/aws-cloud/src",
-      "targets": {
-        "deploy": {
-          "executor": "@nrwl/workspace:run-commands",
-          "options": {
-            "cwd": "apps/aws-cloud",
-            "commands": [
-              {
-                "command": "if [ \"{args.stack}\" = \"undefined\" ]; then cdk deploy --require-approval=never; else cdk deploy --require-approval=never {args.stack}; fi"
-              }
-            ]
-          }
-        },
-        "destroy": {
-          "executor": "@nrwl/workspace:run-commands",
-          "options": {
-            "cwd": "apps/aws-cloud",
-            "commands": [
-              {
-                "command": "if [ \"{args.stack}\" = \"undefined\" ]; then cdk destroy -f; else cdk destroy -f {args.stack}; fi"
-              }
-            ]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/apps/aws-cloud"],
-          "options": {
-            "jestConfig": "apps/aws-cloud/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
     "aws-shared": {
       "root": "libs/aws-shared",
       "sourceRoot": "libs/aws-shared/src",
@@ -108,6 +71,43 @@
             "entryFile": "libs/shaut-message/src/index.ts",
             "tsConfig": "libs/shaut-message/tsconfig.lib.json",
             "outputPath": "dist/libs/shaut-message"
+          }
+        }
+      }
+    },
+    "shauter-cloud": {
+      "projectType": "application",
+      "root": "apps/shauter-cloud",
+      "sourceRoot": "apps/shauter-cloud/src",
+      "targets": {
+        "deploy": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "cwd": "apps/shauter-cloud",
+            "commands": [
+              {
+                "command": "if [ \"{args.stack}\" = \"undefined\" ]; then cdk deploy --require-approval=never; else cdk deploy --require-approval=never {args.stack}; fi"
+              }
+            ]
+          }
+        },
+        "destroy": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "cwd": "apps/shauter-cloud",
+            "commands": [
+              {
+                "command": "if [ \"{args.stack}\" = \"undefined\" ]; then cdk destroy -f; else cdk destroy -f {args.stack}; fi"
+              }
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/shauter-cloud"],
+          "options": {
+            "jestConfig": "apps/shauter-cloud/jest.config.js",
+            "passWithNoTests": true
           }
         }
       }
