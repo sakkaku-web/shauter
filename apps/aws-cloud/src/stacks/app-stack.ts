@@ -30,13 +30,13 @@ export class AppStack extends cdk.Stack {
 
     const messageTable = new Table(scope, 'shautMessage', {
       tableName: ShautMessageTable,
-      timeToLiveAttribute: 'expires',
+      timeToLiveAttribute: ShautMessageColumn.EXPIRES,
       partitionKey: {
         name: ShautMessageColumn.USER_ID,
         type: AttributeType.STRING,
       },
       sortKey: {
-        name: ShautMessageColumn.MESSAGE_ID,
+        name: ShautMessageColumn.MESSAGE,
         type: AttributeType.STRING,
       },
     });

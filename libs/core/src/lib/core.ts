@@ -22,6 +22,7 @@ export interface ShautMessageService {
 
 export interface ShautUserService {
   getUsersForRegions(regions: Coordinate[]): Promise<ShautUser[]>;
+  updateUser(user: ShautUser): Promise<void>;
 }
 
 export class ShautService {

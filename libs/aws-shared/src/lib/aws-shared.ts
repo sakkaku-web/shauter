@@ -2,7 +2,9 @@ export const ShautMessageTable = 'ShautMessage';
 
 export enum ShautMessageColumn {
   USER_ID = 'userId',
-  MESSAGE_ID = 'messageId',
+  MESSAGE = 'message',
+  CREATED= 'created',
+  EXPIRES = 'expires',
 }
 
 export const ShautUserTable = 'ShautUser';
