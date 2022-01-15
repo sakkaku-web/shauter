@@ -1,17 +1,19 @@
 import { APIGatewayEvent } from 'aws-lambda';
-import { ShautMessage } from '@shauter/core';
-import {
-  DynamoDBClient,
-  GetItemCommand,
-  PutItemCommand,
-  BatchGetItemCommand,
-  QueryCommand,
-} from '@aws-sdk/client-dynamodb';
+import { RegionService, ShautMessage } from '@shauter/core';
 import { ShautMessageTable, ShautMessageColumn } from '@shauter/aws-shared';
+import {
+  DynamodbShautMessageService,
+  DynamodbShautUserService,
+} from './shaut-services';
 
-const client = new DynamoDBClient({
-  region: 'eu-central-1',
+const regionService = new RegionService({
+  lat: 90,
+  long: 180,
+  latDividor: 900,
+  longDividor: 1800,
 });
+const messageService = new DynamodbShautMessageService();
+const userService = new DynamodbShautUserService();
 
 export const handler = async ({ body }: APIGatewayEvent) => {
   const message: ShautMessage = JSON.parse(body);
