@@ -65,11 +65,12 @@ export class DynamodbShautMessageService implements ShautMessageService {
 
 export class DynamodbShautUserService implements ShautUserService {
   async getUsersForRegions(regions: Coordinate[]): Promise<ShautUser[]> {
+    const regionIds = regions.map((coor) => coordinatesToRegion(coor));
     const query = new QueryCommand({
       TableName: ShautUserTable,
       KeyConditionExpression: `${ShautUserColumn.REGION} IN :regions`,
       ExpressionAttributeValues: {
-        ':regions': { SS: ['1;1'] },
+        ':regions': { SS: regionIds },
       },
     });
 
