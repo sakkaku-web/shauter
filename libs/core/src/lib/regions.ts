@@ -70,4 +70,15 @@ export class RegionService {
 
     return result;
   }
+
+  getRegionsForShaut(origin: Coordinate, radius: number): Coordinate[] {
+    const box: RegionBox = {
+      leftTop: { lat: origin.lat + radius, long: origin.long - radius },
+      leftBottom: { lat: origin.lat - radius, long: origin.long - radius },
+      rightTop: { lat: origin.lat + radius, long: origin.long + radius },
+      rightBottom: { lat: origin.lat - radius, long: origin.long + radius },
+    };
+
+    return this.getRegionsForBox(box);
+  }
 }
