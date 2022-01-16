@@ -4,6 +4,7 @@ import { HttpLambdaIntegration } from '@aws-cdk/aws-apigatewayv2-integrations';
 import { AttributeType, Table } from '@aws-cdk/aws-dynamodb';
 import { Code, Function, Runtime } from '@aws-cdk/aws-lambda';
 import { RetentionDays } from '@aws-cdk/aws-logs';
+import { UserPool, UserPoolIdentityProviderGoogle } from '@aws-cdk/aws-cognito';
 import { join } from 'path';
 import {
   ShautMessageTable,
@@ -67,6 +68,13 @@ export class AppStack extends cdk.Stack {
         'shautMessage',
         shautMessageFunction
       ),
+    });
+
+    const googleUserPool = new UserPool(this, 'googleIdentityUserPool');
+    const googleProvider = new UserPoolIdentityProviderGoogle(this, 'googleIdentityProvider', {
+      clientId: process.env.GOOGLE_CLIENT,
+      clientSecret: process.env.GOOGLE_SECRET,
+      userPool: googleUserPool,
     });
 
     new cdk.CfnOutput(this, 'apiUrl', { value: api.url });
