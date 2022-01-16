@@ -19,7 +19,6 @@ export class AppStack extends cdk.Stack {
     const api = new HttpApi(this, 'shautApi', {
       corsPreflight: {
         allowOrigins: [
-          'http://localhost:4200',
           'https://sakkaku-web.github.io',
         ],
         allowHeaders: ['Authorization'],
@@ -44,11 +43,7 @@ export class AppStack extends cdk.Stack {
     const userTable = new Table(this, 'shautUser', {
       tableName: ShautUserTable,
       partitionKey: {
-        name: ShautUserColumn.REGION,
-        type: AttributeType.STRING,
-      },
-      sortKey: {
-        name: ShautUserColumn.USER_ID,
+        name: ShautUserColumn.REGION_ID,
         type: AttributeType.STRING,
       },
     });

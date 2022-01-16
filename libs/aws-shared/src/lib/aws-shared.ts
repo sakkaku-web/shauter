@@ -10,6 +10,6 @@ export enum ShautMessageColumn {
 export const ShautUserTable = 'ShautUser';
 
 export enum ShautUserColumn {
-  REGION = 'region',
-  USER_ID = 'userId',
+  REGION_ID = 'regionId',
+  USER_ID = 'userIds',
 }

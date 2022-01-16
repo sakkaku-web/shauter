@@ -45,6 +45,28 @@
         }
       }
     },
+    "shaut-client": {
+      "root": "libs/shaut-client",
+      "sourceRoot": "libs/shaut-client/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/shaut-client/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shaut-client"],
+          "options": {
+            "jestConfig": "libs/shaut-client/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "shaut-message": {
       "root": "libs/shaut-message",
       "sourceRoot": "libs/shaut-message/src",

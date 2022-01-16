@@ -9,8 +9,7 @@ import {
   DynamoDBClient,
   BatchWriteItemCommand,
   WriteRequest,
-  QueryCommand,
-  PutItemCommand,
+  BatchGetItemCommand,
 } from '@aws-sdk/client-dynamodb';
 import {
   ShautMessageColumn,
@@ -66,32 +65,39 @@ export class DynamodbShautMessageService implements ShautMessageService {
 
 export class DynamodbShautUserService implements ShautUserService {
   async getUsersForRegions(regions: Coordinate[]): Promise<ShautUser[]> {
-    const regionIds = regions.map((coor) => coordinatesToRegion(coor));
-    const query = new QueryCommand({
-      TableName: ShautUserTable,
-      KeyConditionExpression: `${ShautUserColumn.REGION} IN (:regions)`,
-      ExpressionAttributeValues: {
-        ':regions': { SS: regionIds },
+    const regionIds = regions.map((coor) => ({
+      [ShautUserColumn.REGION_ID]: { S: coordinatesToRegion(coor) },
+    }));
+    const query = new BatchGetItemCommand({
+      RequestItems: {
+        [ShautUserTable]: {
+          Keys: regionIds,
+        },
       },
     });
 
     const response = await client.send(query);
-    return response.Items.map((i) => ({
-      id: i[ShautUserColumn.USER_ID].S,
-      region: regionToCoordinates(i[ShautUserColumn.REGION].S),
-    }));
+    // TODO: handle unprocessed
+
+    return response.Responses[ShautUserTable].map((i) => {
+      return i[ShautUserColumn.USER_ID].SS.map((u) => ({
+        id: u,
+        region: regionToCoordinates(i[ShautUserColumn.REGION_ID].S),
+      }));
+    }).reduce((prev, curr) => prev.concat(curr), []);
   }
 
   async updateUser(user: ShautUser) {
-    const putRequest = new PutItemCommand({
-      TableName: ShautUserTable,
-      Item: {
-        [ShautUserColumn.REGION]: { S: coordinatesToRegion(user.region) },
-        [ShautUserColumn.USER_ID]: { S: user.id },
-      },
-    });
+    console.log(user);
+    // const putRequest = new PutItemCommand({
+    //   TableName: ShautUserTable,
+    //   Item: {
+    //     [ShautUserColumn.REGION_ID]: { S: coordinatesToRegion(user.region) },
+    //     [ShautUserColumn.USER_ID]: { S: user.id },
+    //   },
+    // });
 
-    const response = await client.send(putRequest);
-    console.log(response.Attributes);
+    // const response = await client.send(putRequest);
+    // console.log(response.Attributes);
   }
 }
