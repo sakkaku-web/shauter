@@ -10,13 +10,9 @@ import {
   BatchWriteItemCommand,
   WriteRequest,
   BatchGetItemCommand,
+  PutItemCommand,
 } from '@aws-sdk/client-dynamodb';
-import {
-  ShautMessageColumn,
-  ShautMessageTable,
-  ShautUserColumn,
-  ShautUserTable,
-} from '@shauter/aws-shared';
+import { ShautUserColumn, ShautUserTable } from '@shauter/aws-shared';
 
 const client = new DynamoDBClient({
   region: 'eu-central-1',
@@ -42,10 +38,11 @@ export class DynamodbShautMessageService implements ShautMessageService {
     const requests: WriteRequest[] = users.map((u) => ({
       PutRequest: {
         Item: {
-          [ShautMessageColumn.USER_ID]: { S: u.id },
-          [ShautMessageColumn.MESSAGE]: { S: message.text },
-          [ShautMessageColumn.CREATED]: { N: `${created.getTime()}` },
-          [ShautMessageColumn.EXPIRES]: { N: `${expires}` },
+          [ShautUserColumn.USER_ID]: { S: u.id },
+          [ShautUserColumn.DATA_ID]: { S: `MESSAGE_${created.toISOString()}` },
+          [ShautUserColumn.MESSAGE]: { S: message.text },
+          [ShautUserColumn.CREATED]: { N: `${created.getTime()}` },
+          [ShautUserColumn.EXPIRES]: { N: `${expires}` },
         },
       },
     }));
@@ -53,7 +50,7 @@ export class DynamodbShautMessageService implements ShautMessageService {
     const response = await client.send(
       new BatchWriteItemCommand({
         RequestItems: {
-          [ShautMessageTable]: requests,
+          [ShautUserTable]: requests,
         },
       })
     );
@@ -66,7 +63,7 @@ export class DynamodbShautMessageService implements ShautMessageService {
 export class DynamodbShautUserService implements ShautUserService {
   async getUsersForRegions(regions: Coordinate[]): Promise<ShautUser[]> {
     const regionIds = regions.map((coor) => ({
-      [ShautUserColumn.REGION_ID]: { S: coordinatesToRegion(coor) },
+      [ShautUserColumn.REGION]: { S: coordinatesToRegion(coor) },
     }));
     const query = new BatchGetItemCommand({
       RequestItems: {
@@ -82,22 +79,22 @@ export class DynamodbShautUserService implements ShautUserService {
     return response.Responses[ShautUserTable].map((i) => {
       return i[ShautUserColumn.USER_ID].SS.map((u) => ({
         id: u,
-        region: regionToCoordinates(i[ShautUserColumn.REGION_ID].S),
+        region: regionToCoordinates(i[ShautUserColumn.REGION].S),
       }));
     }).reduce((prev, curr) => prev.concat(curr), []);
   }
 
   async updateUser(user: ShautUser) {
-    console.log(user);
-    // const putRequest = new PutItemCommand({
-    //   TableName: ShautUserTable,
-    //   Item: {
-    //     [ShautUserColumn.REGION_ID]: { S: coordinatesToRegion(user.region) },
-    //     [ShautUserColumn.USER_ID]: { S: user.id },
-    //   },
-    // });
+    const putRequest = new PutItemCommand({
+      TableName: ShautUserTable,
+      Item: {
+        [ShautUserColumn.USER_ID]: { S: user.id },
+        [ShautUserColumn.DATA_ID]: { S: 'REGION_DATA' },
+        [ShautUserColumn.REGION]: { S: coordinatesToRegion(user.region) },
+      },
+    });
 
-    // const response = await client.send(putRequest);
-    // console.log(response.Attributes);
+    const response = await client.send(putRequest);
+    console.log(response.Attributes);
   }
 }

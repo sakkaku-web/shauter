@@ -1,4 +1,4 @@
-import { APIGatewayEvent, APIGatewayProxyResultV2 } from 'aws-lambda';
+import { APIGatewayProxyResultV2 } from 'aws-lambda';
 import { ShautMessage, ShautService } from '@shauter/core';
 import {
   DynamodbShautMessageService,
@@ -9,11 +9,9 @@ const messageService = new DynamodbShautMessageService();
 const userService = new DynamodbShautUserService();
 const shautService = new ShautService(messageService, userService);
 
-export const handler = async ({
-  body,
-}: APIGatewayEvent): Promise<APIGatewayProxyResultV2> => {
-  const message: ShautMessage = JSON.parse(body);
-
+export const handler = async (
+  message: ShautMessage
+): Promise<APIGatewayProxyResultV2> => {
   try {
     await shautService.shautMessage(message);
     return {

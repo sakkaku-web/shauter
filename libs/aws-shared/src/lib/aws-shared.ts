@@ -1,15 +1,12 @@
-export const ShautMessageTable = 'ShautMessage';
-
-export enum ShautMessageColumn {
-  USER_ID = 'userId',
-  MESSAGE = 'message',
-  CREATED= 'created',
-  EXPIRES = 'expires',
-}
-
 export const ShautUserTable = 'ShautUser';
 
 export enum ShautUserColumn {
-  REGION_ID = 'regionId',
-  USER_ID = 'userIds',
+  USER_ID = 'userId',
+  DATA_ID = 'dataId',
+
+  REGION = 'region',
+
+  MESSAGE = 'message',
+  EXPIRES = 'expires',
+  CREATED = 'created',
 }

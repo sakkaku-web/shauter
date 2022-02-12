@@ -7,8 +7,6 @@ import { RetentionDays } from '@aws-cdk/aws-logs';
 import { UserPool, UserPoolIdentityProviderGoogle } from '@aws-cdk/aws-cognito';
 import { join } from 'path';
 import {
-  ShautMessageTable,
-  ShautMessageColumn,
   ShautUserTable,
   ShautUserColumn,
 } from '../../../../libs/aws-shared/src';
@@ -19,32 +17,43 @@ export class AppStack extends cdk.Stack {
 
     const api = new HttpApi(this, 'shautApi', {
       corsPreflight: {
-        allowOrigins: [
-          'https://sakkaku-web.github.io',
-        ],
+        allowOrigins: ['https://sakkaku-web.github.io'],
         allowHeaders: ['Authorization'],
         allowMethods: [CorsHttpMethod.ANY],
         allowCredentials: true,
       },
     });
 
-    const messageTable = new Table(this, 'shautMessage', {
-      tableName: ShautMessageTable,
-      timeToLiveAttribute: ShautMessageColumn.EXPIRES,
+    // const messageTable = new Table(this, 'shautMessage', {
+    //   tableName: ShautMessageTable,
+    //   timeToLiveAttribute: ShautMessageColumn.EXPIRES,
+    //   partitionKey: {
+    //     name: ShautMessageColumn.USER_ID,
+    //     type: AttributeType.STRING,
+    //   },
+    //   sortKey: {
+    //     name: ShautMessageColumn.MESSAGE,
+    //     type: AttributeType.STRING,
+    //   },
+    // });
+
+    const userTable = new Table(this, 'shautUser', {
+      tableName: ShautUserTable,
+      timeToLiveAttribute: ShautUserColumn.EXPIRES,
       partitionKey: {
-        name: ShautMessageColumn.USER_ID,
+        name: ShautUserColumn.USER_ID,
         type: AttributeType.STRING,
       },
       sortKey: {
-        name: ShautMessageColumn.MESSAGE,
+        name: ShautUserColumn.DATA_ID,
         type: AttributeType.STRING,
       },
     });
 
-    const userTable = new Table(this, 'shautUser', {
-      tableName: ShautUserTable,
+    userTable.addGlobalSecondaryIndex({
+      indexName: 'gsiRegion',
       partitionKey: {
-        name: ShautUserColumn.REGION_ID,
+        name: ShautUserColumn.REGION,
         type: AttributeType.STRING,
       },
     });
@@ -58,7 +67,7 @@ export class AppStack extends cdk.Stack {
       logRetention: RetentionDays.ONE_MONTH,
     });
 
-    messageTable.grantWriteData(shautMessageFunction);
+    // messageTable.grantWriteData(shautMessageFunction);
     userTable.grantReadData(shautMessageFunction);
 
     api.addRoutes({
@@ -71,12 +80,19 @@ export class AppStack extends cdk.Stack {
     });
 
     const googleUserPool = new UserPool(this, 'googleIdentityUserPool');
-    const googleProvider = new UserPoolIdentityProviderGoogle(this, 'googleIdentityProvider', {
-      clientId: process.env.GOOGLE_CLIENT,
-      clientSecret: process.env.GOOGLE_SECRET,
-      userPool: googleUserPool,
-    });
+    const googleProvider = new UserPoolIdentityProviderGoogle(
+      this,
+      'googleIdentityProvider',
+      {
+        clientId: process.env.GOOGLE_CLIENT,
+        clientSecret: process.env.GOOGLE_SECRET,
+        userPool: googleUserPool,
+      }
+    );
 
     new cdk.CfnOutput(this, 'apiUrl', { value: api.url });
+    new cdk.CfnOutput(this, 'identityPool', {
+      value: googleUserPool.userPoolArn,
+    });
   }
 }
